@@ -26,6 +26,7 @@ const Navbar = () => {
   };
 
   const navigation = [
+    { name: 'How It Works', href: '/howitworks', roles: [] }, // Public access - no roles required
     { name: 'Dashboard', href: '/dashboard', roles: ['crm', 'admin'] },
     { name: 'Pre Leads', href: '/preleads', roles: ['crm', 'admin'] },
     { name: 'Leads', href: '/leads', roles: ['crm', 'admin'] },
