@@ -6,11 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:prod": "NODE_ENV=production next build",
+    "start:prod": "NODE_ENV=production next start"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "axios": "^1.7.7",
+    "country-state-city": "^3.2.1",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",

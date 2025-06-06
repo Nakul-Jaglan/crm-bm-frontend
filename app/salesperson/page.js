@@ -14,6 +14,7 @@ export default function SalespersonPage() {
   const [toast, setToast] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState({});
   const { user } = useAuth();
 
   useEffect(() => {
@@ -23,8 +24,10 @@ export default function SalespersonPage() {
   const fetchAssignments = async () => {
     try {
       const data = await assignmentAPI.getAssignments();
+      console.log('Fetched assignments:', data);
       setAssignments(data);
     } catch (error) {
+      console.error('Failed to fetch assignments:', error);
       setToast({ type: 'error', message: 'Failed to fetch assignments' });
     } finally {
       setLoading(false);
@@ -43,6 +46,52 @@ export default function SalespersonPage() {
       setToast({ type: 'error', message: 'Failed to update location' });
     } finally {
       setIsUpdatingLocation(false);
+    }
+  };
+
+  const handleStatusUpdate = async (assignmentId, newStatus, notes = '') => {
+    console.log('Updating assignment:', assignmentId, 'to status:', newStatus);
+    console.log('Assignment object:', assignments.find(a => a.id === assignmentId));
+    setUpdatingStatus(prev => ({ ...prev, [assignmentId]: true }));
+    
+    try {
+      const result = await assignmentAPI.updateAssignmentStatus(assignmentId, newStatus, notes);
+      console.log('Update result:', result);
+      
+      // Update the assignment in the local state
+      setAssignments(prev => prev.map(assignment => 
+        assignment.id === assignmentId 
+          ? { ...assignment, status: newStatus, notes: notes || assignment.notes }
+          : assignment
+      ));
+      
+      setToast({ 
+        type: 'success', 
+        message: `Assignment status updated to ${newStatus.replace('_', ' ')}!` 
+      });
+    } catch (error) {
+      console.error('Assignment update error:', error);
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      console.error('Request URL:', error.config?.url);
+      console.error('Request method:', error.config?.method);
+      console.error('Request data:', error.config?.data);
+      
+      let errorMessage = 'Failed to update assignment status';
+      if (error.response?.status === 404) {
+        errorMessage = 'Assignment not found. The assignment may have been deleted.';
+      } else if (error.response?.status === 403) {
+        errorMessage = 'You do not have permission to update this assignment.';
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      
+      setToast({ 
+        type: 'error', 
+        message: errorMessage
+      });
+    } finally {
+      setUpdatingStatus(prev => ({ ...prev, [assignmentId]: false }));
     }
   };
 
@@ -68,8 +117,9 @@ export default function SalespersonPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending': return 'text-blue-300 bg-blue-900/20 border-blue-800';
-      case 'accepted': return 'text-green-300 bg-green-900/20 border-green-800';
-      case 'completed': return 'text-purple-300 bg-purple-900/20 border-purple-800';
+      case 'accepted': return 'text-yellow-300 bg-yellow-900/20 border-yellow-800';
+      case 'in_progress': return 'text-orange-300 bg-orange-900/20 border-orange-800';
+      case 'completed': return 'text-green-300 bg-green-900/20 border-green-800';
       case 'rejected': return 'bg-red-900/20 text-red-300 border-red-800';
       default: return 'bg-gray-700 text-gray-300 border-gray-600';
     }
@@ -183,7 +233,7 @@ export default function SalespersonPage() {
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-yellow-600">
-                    {assignments.filter(a => a.status === 'accepted').length}
+                    {assignments.filter(a => a.status === 'accepted' || a.status === 'in_progress').length}
                   </div>
                   <div className="text-sm text-gray-400">In Progress</div>
                 </div>
@@ -230,7 +280,7 @@ export default function SalespersonPage() {
                           </div>
                           <div className="flex flex-col items-end space-y-2">
                             <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getPriorityColor(assignment.lead?.priority)}`}>
-                              {assignment.lead?.priority} priority
+                              {assignment.lead?.priority ? `${assignment.lead.priority.charAt(0).toUpperCase()}${assignment.lead.priority.slice(1)} Priority` : 'Priority'}
                             </span>
                             <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(assignment.status)}`}>
                               {assignment.status}
@@ -263,32 +313,89 @@ export default function SalespersonPage() {
                         </div>
                       </div>
                       
-                      <div className="mt-4 lg:mt-0 lg:ml-6 flex flex-col lg:flex-row gap-2">
-                        {assignment.lead?.lat && assignment.lead?.lng && (
-                          <a
-                            href={`https://www.google.com/maps/dir/?api=1&destination=${assignment.lead.lat},${assignment.lead.lng}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-secondary text-center"
-                          >
-                            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                            </svg>
-                            Get Directions
-                          </a>
-                        )}
+                      <div className="mt-4 lg:mt-0 lg:ml-6">
+                        {/* Status Update Buttons */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {assignment.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleStatusUpdate(assignment.id, 'accepted')}
+                                disabled={updatingStatus[assignment.id]}
+                                className="btn-primary text-xs px-3 py-1 disabled:opacity-50"
+                              >
+                                {updatingStatus[assignment.id] ? '...' : 'Accept'}
+                              </button>
+                              <button
+                                onClick={() => handleStatusUpdate(assignment.id, 'rejected')}
+                                disabled={updatingStatus[assignment.id]}
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+                          
+                          {assignment.status === 'accepted' && (
+                            <button
+                              onClick={() => handleStatusUpdate(assignment.id, 'in_progress')}
+                              disabled={updatingStatus[assignment.id]}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                            >
+                              {updatingStatus[assignment.id] ? '...' : 'Start Work'}
+                            </button>
+                          )}
+                          
+                          {assignment.status === 'in_progress' && (
+                            <button
+                              onClick={() => handleStatusUpdate(assignment.id, 'completed')}
+                              disabled={updatingStatus[assignment.id]}
+                              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                            >
+                              {updatingStatus[assignment.id] ? '...' : 'Mark Complete'}
+                            </button>
+                          )}
+                          
+                          {assignment.status === 'completed' && (
+                            <span className="text-green-400 text-xs font-medium px-3 py-1 bg-green-900/20 rounded">
+                              ✓ Completed
+                            </span>
+                          )}
+                          
+                          {assignment.status === 'rejected' && (
+                            <span className="text-red-400 text-xs font-medium px-3 py-1 bg-red-900/20 rounded">
+                              ✗ Rejected
+                            </span>
+                          )}
+                        </div>
                         
-                        {assignment.lead?.phone && (
-                          <a
-                            href={`tel:${assignment.lead.phone}`}
-                            className="btn-primary text-center"
-                          >
-                            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
-                            Call
-                          </a>
-                        )}
+                        {/* Action Buttons */}
+                        <div className="flex flex-col lg:flex-row gap-2">
+                          {assignment.lead?.lat && assignment.lead?.lng && (
+                            <a
+                              href={`https://www.google.com/maps/dir/?api=1&destination=${assignment.lead.lat},${assignment.lead.lng}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-secondary text-center"
+                            >
+                              <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                              </svg>
+                              Get Directions
+                            </a>
+                          )}
+                          
+                          {assignment.lead?.phone && (
+                            <a
+                              href={`tel:${assignment.lead.phone}`}
+                              className="btn-primary text-center"
+                            >
+                              <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                              </svg>
+                              Call
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

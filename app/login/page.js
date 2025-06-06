@@ -25,6 +25,8 @@ export default function LoginPage() {
         redirectPath = '/salesperson';
       } else if (user.role === 'executive') {
         redirectPath = '/reports';
+      } else if (user.role === 'hr') {
+        redirectPath = '/hr/onboarding';
       }
       
       router.push(redirectPath);
@@ -41,9 +43,11 @@ export default function LoginPage() {
       if (result.success) {
         setToast({ type: 'success', message: 'Login successful!' });
         
-        // Immediate redirect for executives
+        // Immediate redirect for specific roles
         if (result.user && result.user.role === 'executive') {
           router.push('/reports');
+        } else if (result.user && result.user.role === 'hr') {
+          router.push('/hr/onboarding');
         }
         // Other redirects will happen via useEffect
       } else {

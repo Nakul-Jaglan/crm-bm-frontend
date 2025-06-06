@@ -1,23 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Country, State } from 'country-state-city';
 import Navbar from '../../components/Navbar';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Toast from '../../components/Toast';
-import { leadAPI, userAPI, assignmentAPI, getCurrentLocation } from '../../lib/api';
+import { leadAPI, userAPI, assignmentAPI, preLeadAPI, getCurrentLocation } from '../../lib/api';
 
 // Get the API base URL from the environment or use default
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState([]);
+  const [preLeads, setPreLeads] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [salespersons, setSalespersons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
   const [showCreateLeadModal, setShowCreateLeadModal] = useState(false);
+  const [showCreatePreLeadModal, setShowCreatePreLeadModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [nearbySalespersons, setNearbySalespersons] = useState([]);
   const [newLead, setNewLead] = useState({
@@ -29,23 +32,51 @@ export default function DashboardPage() {
     lat: '',
     lng: '',
     googleMapsLink: '',
-    priority: 'medium',
+    priority: 'hot',
     notes: '',
   });
+  const [newPreLead, setNewPreLead] = useState({
+    company_name: '',
+    country: '',
+    state: '',
+    reason: '',
+    source: '',
+    notes: '',
+  });
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
 
   useEffect(() => {
     fetchData();
+    // Load countries for dropdown
+    const countryList = Country.getAllCountries();
+    setCountries(countryList);
   }, []);
+
+  // Load states when country changes
+  useEffect(() => {
+    if (newPreLead.country) {
+      const selectedCountry = countries.find(country => country.name === newPreLead.country);
+      if (selectedCountry) {
+        const stateList = State.getStatesOfCountry(selectedCountry.isoCode);
+        setStates(stateList);
+      }
+    } else {
+      setStates([]);
+    }
+  }, [newPreLead.country, countries]);
 
   const fetchData = async () => {
     try {
-      const [leadsData, assignmentsData, salespersonsData] = await Promise.all([
+      const [leadsData, preLeadsData, assignmentsData, salespersonsData] = await Promise.all([
         leadAPI.getLeads(),
+        preLeadAPI.getPreLeads(),
         assignmentAPI.getAssignments(),
         userAPI.getAllSalespersons(),
       ]);
 
       setLeads(leadsData);
+      setPreLeads(preLeadsData);
       setAssignments(assignmentsData);
       setSalespersons(salespersonsData);
     } catch (error) {
@@ -89,12 +120,32 @@ export default function DashboardPage() {
         lat: '',
         lng: '',
         googleMapsLink: '',
-        priority: 'medium',
+        priority: 'hot',
         notes: '',
       });
       fetchData();
     } catch (error) {
       setToast({ type: 'error', message: 'Failed to create lead' });
+    }
+  };
+
+  const handleCreatePreLead = async (e) => {
+    e.preventDefault();
+    try {
+      await preLeadAPI.createPreLead(newPreLead);
+      setToast({ type: 'success', message: 'Pre-lead created successfully!' });
+      setShowCreatePreLeadModal(false);
+      setNewPreLead({
+        company_name: '',
+        country: '',
+        state: '',
+        reason: '',
+        source: '',
+        notes: '',
+      });
+      fetchData();
+    } catch (error) {
+      setToast({ type: 'error', message: 'Failed to create pre-lead' });
     }
   };
 
@@ -265,6 +316,7 @@ export default function DashboardPage() {
 
   const stats = {
     totalLeads: leads.length,
+    totalPreLeads: preLeads.length,
     unassignedLeads: leads.filter(lead => lead.status === 'unassigned').length,
     assignedLeads: leads.filter(lead => lead.status === 'assigned').length,
     activeSalespersons: salespersons.filter(sp => sp.status === 'available').length,
@@ -303,7 +355,23 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <div className="glass-card p-6 card-hover">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-400">Pre-Leads</p>
+                  <p className="text-2xl font-bold text-white">{stats.totalPreLeads}</p>
+                </div>
+              </div>
+            </div>
+
             <div className="glass-card p-6 card-hover">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -372,8 +440,18 @@ export default function DashboardPage() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <button
-              onClick={() => setShowCreateLeadModal(true)}
+              onClick={() => setShowCreatePreLeadModal(true)}
               className="btn-primary"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Create Pre-Lead
+            </button>
+
+            <button
+              onClick={() => setShowCreateLeadModal(true)}
+              className="btn-secondary"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -392,9 +470,88 @@ export default function DashboardPage() {
             </button>
           </div>
 
+          {/* Recent Pre-Leads */}
+          <div className="glass-card p-6 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white border-b-2 border-primary pb-1 mb-2">Recent Pre-Leads</h2>
+                <p className="text-sm text-gray-400">Latest prospects in your pipeline</p>
+              </div>
+              <button
+                onClick={() => window.location.href = '/preleads'}
+                className="text-primary hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
+              >
+                View All
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            <div className="overflow-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="text-left py-3 px-4 font-medium text-gray-300">Company</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-300">Country</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-300">Source</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-300">Status</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-300">Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {preLeads.slice(0, 5).map((preLead) => (
+                    <tr key={preLead.id} className="border-b border-gray-800">
+                      <td className="py-3 px-4">
+                        <div className="font-medium text-white">{preLead.company_name}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="text-sm text-gray-300">{preLead.country}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="text-sm text-gray-300 capitalize">{preLead.source}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          preLead.converted_to_lead_id
+                            ? 'bg-green-900/20 text-green-300'
+                            : 'bg-purple-900/20 text-purple-300'
+                        }`}>
+                          {preLead.converted_to_lead_id ? 'Converted' : 'Active'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="text-sm text-gray-400">
+                          {new Date(preLead.created_at).toLocaleDateString()}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {preLeads.length === 0 && (
+                    <tr>
+                      <td colSpan="5" className="py-8 text-center text-gray-400">
+                        No pre-leads yet. Create your first pre-lead to get started!
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           {/* Leads Table */}
           <div className="glass-card p-6 h-[500px] flex flex-col">
-            <h2 className="text-xl font-semibold text-white mb-4">Recent Leads</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-white">Recent Leads</h2>
+              <button
+                onClick={() => window.location.href = '/leads'}
+                className="text-primary hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
+              >
+                View All
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
             <div className="flex-1 overflow-auto">
               <table className="w-full">
                 <thead className="sticky top-0 bg-gray-900">
@@ -423,13 +580,13 @@ export default function DashboardPage() {
                       </td>
                       <td className="py-3 px-4">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          lead.priority === 'high'
+                          lead.priority === 'hot'
                             ? 'bg-red-900/20 text-red-300'
-                            : lead.priority === 'medium'
+                            : lead.priority === 'warm'
                             ? 'bg-yellow-900/20 text-yellow-300'
-                            : 'bg-green-900/20 text-green-300'
+                            : 'bg-blue-900/20 text-blue-300'
                         }`}>
-                          {lead.priority}
+                          {lead.priority.charAt(0).toUpperCase() + lead.priority.slice(1)}
                         </span>
                       </td>
                       <td className="py-3 px-4">
@@ -560,9 +717,9 @@ export default function DashboardPage() {
                   onChange={(e) => setNewLead({...newLead, priority: e.target.value})}
                   className="input-field"
                 >
-                  <option value="low">Low Priority</option>
-                  <option value="medium">Medium Priority</option>
-                  <option value="high">High Priority</option>
+                  <option value="hot">Hot</option>
+                  <option value="warm">Warm</option>
+                  <option value="cold">Cold</option>
                 </select>
 
                 <textarea
@@ -579,6 +736,91 @@ export default function DashboardPage() {
                   <button
                     type="button"
                     onClick={() => setShowCreateLeadModal(false)}
+                    className="btn-secondary flex-1"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Create Pre-Lead Modal */}
+        {showCreatePreLeadModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="glass-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+              <h3 className="text-lg font-semibold text-white mb-4">Create New Pre-Lead</h3>
+
+              <form onSubmit={handleCreatePreLead} className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Company Name"
+                  value={newPreLead.company_name}
+                  onChange={(e) => setNewPreLead({...newPreLead, company_name: e.target.value})}
+                  className="input-field"
+                  required
+                />
+
+                <select
+                  value={newPreLead.country}
+                  onChange={(e) => setNewPreLead({...newPreLead, country: e.target.value, state: ''})}
+                  className="input-field"
+                  required
+                >
+                  <option value="">Select Country</option>
+                  {countries.map((country) => (
+                    <option key={country.isoCode} value={country.name}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={newPreLead.state}
+                  onChange={(e) => setNewPreLead({...newPreLead, state: e.target.value})}
+                  className="input-field"
+                  disabled={!newPreLead.country}
+                >
+                  <option value="">Select State (Optional)</option>
+                  {states.map((state) => (
+                    <option key={state.isoCode} value={state.name}>
+                      {state.name}
+                    </option>
+                  ))}
+                </select>
+
+                <textarea
+                  placeholder="Reason for prospecting (e.g., expanding manufacturing, automation needs)"
+                  value={newPreLead.reason}
+                  onChange={(e) => setNewPreLead({...newPreLead, reason: e.target.value})}
+                  className="input-field h-20 resize-none"
+                  required
+                />
+
+                <input
+                  type="text"
+                  placeholder="Source (e.g., website, trade show, referral, LinkedIn, cold call)"
+                  value={newPreLead.source}
+                  onChange={(e) => setNewPreLead({...newPreLead, source: e.target.value})}
+                  className="input-field"
+                  required
+                />
+
+                <textarea
+                  placeholder="Additional notes"
+                  value={newPreLead.notes}
+                  onChange={(e) => setNewPreLead({...newPreLead, notes: e.target.value})}
+                  className="input-field h-20 resize-none"
+                />
+
+                <div className="flex gap-3">
+                  <button type="submit" className="btn-primary flex-1">
+                    Create Pre-Lead
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCreatePreLeadModal(false)}
                     className="btn-secondary flex-1"
                   >
                     Cancel

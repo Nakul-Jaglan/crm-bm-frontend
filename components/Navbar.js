@@ -27,6 +27,8 @@ const Navbar = () => {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', roles: ['crm', 'admin'] },
+    { name: 'Pre Leads', href: '/preleads', roles: ['crm', 'admin'] },
+    { name: 'Leads', href: '/leads', roles: ['crm', 'admin'] },
     { name: 'Salesperson View', href: '/salesperson', roles: ['salesperson'] },
     { name: 'All Salespersons', href: '/salespersons', roles: ['crm', 'admin'] },
     { name: 'Map View', href: '/map', roles: ['crm', 'admin', 'executive'] },
@@ -76,7 +78,7 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-primary transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-gray-800"
+                className="text-gray-300 hover:text-primary transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-gray-800 text-center"
               >
                 {item.name}
               </Link>

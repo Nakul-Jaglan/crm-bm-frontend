@@ -257,7 +257,7 @@ export default function ReportsPage() {
     }
     
     // Save the PDF
-    doc.save('territorial-report.pdf');
+    doc.save(`territorial-report-${user.full_name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`);
     setToast({ type: 'success', message: 'Report downloaded successfully!' });
   };
 
@@ -436,7 +436,7 @@ export default function ReportsPage() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-400">Total Value</p>
-                  <p className="text-2xl font-bold text-white">₹{analytics.totalValue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-white">₹{parseInt(analytics.totalValue).toLocaleString()}</p>
                 </div>
               </div>
             </div>
