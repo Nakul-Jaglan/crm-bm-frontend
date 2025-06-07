@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Toast from '../../components/Toast';
+import Link from 'next/link';
+import { HelpCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -160,6 +162,18 @@ export default function LoginPage() {
           <p>&copy; 2025 Bonhoeffer Machines. All rights reserved.</p>
         </div>
       </div>
+
+      {/* Floating How It Works Button */}
+      <Link href="/howitworks">
+        <div className="fixed bottom-6 right-6 cursor-pointer">
+          <div className="bg-[#999b30] hover:bg-primary-dark text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
+            <HelpCircle size={20} />
+            <span className="text-sm font-medium whitespace-nowrap">
+              How it works
+            </span>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }

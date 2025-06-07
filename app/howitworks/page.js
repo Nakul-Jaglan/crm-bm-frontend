@@ -480,25 +480,19 @@ const HowItWorksPage = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-white" />
+                <div className=" rounded-lg flex items-center justify-center">
+                  <img src='/logo.png' className="w-15 text-white" />
                 </div>
                 <span className="text-xl font-bold text-white">Bonhoeffer Machines CRM</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Link 
-                href="/login" 
-                className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-lg"
-              >
-                Sign In
-              </Link>
-              <Link 
-                href="/login" 
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
-              >
-                Get Started
-              </Link>
+                <Link 
+                    href="/login" 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+                >
+                    Login
+                </Link>
             </div>
           </div>
         </div>
