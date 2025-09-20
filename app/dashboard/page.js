@@ -479,7 +479,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => window.location.href = '/preleads'}
-                className="text-primary hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
+                className="text-primary cursor-pointer hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
               >
                 View All
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -544,7 +544,7 @@ export default function DashboardPage() {
               <h2 className="text-xl font-semibold text-white">Recent Leads</h2>
               <button
                 onClick={() => window.location.href = '/leads'}
-                className="text-primary hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
+                className="text-primary cursor-pointer hover:text-primary-dark transition-colors duration-200 font-medium flex items-center gap-1"
               >
                 View All
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -602,7 +602,7 @@ export default function DashboardPage() {
                         {lead.status === 'unassigned' && (
                           <button
                             onClick={() => handleFindNearby(lead)}
-                            className="text-primary hover:text-primary-dark transition-colors duration-200 text-sm font-medium"
+                            className="text-primary cursor-pointer hover:text-primary-dark transition-colors duration-200 text-sm font-medium"
                           >
                             Find & Assign
                           </button>
@@ -679,7 +679,7 @@ export default function DashboardPage() {
                     <button
                       type="button"
                       onClick={handleGetLocation}
-                      className="px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+                      className="px-3 py-2 cursor-pointer bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
                       title="Use current location"
                     >
                       📍

@@ -276,15 +276,15 @@ export default function PreLeadsPage() {
                     preLeads.map((preLead) => (
                       <React.Fragment key={preLead.id}>
                         <tr className="border-b border-gray-800 hover:bg-gray-800/30">
-                          <td className="py-6 px-4 text-white font-medium text-xs">{preLead.company_name}</td>
+                          <td className="py-6 px-4 text-white font-medium text-base">{preLead.company_name}</td>
                           <td className="py-6 px-4 text-gray-300 text-xs">{preLead.country}</td>
                           <td className="py-6 px-4 text-gray-300 text-xs">{preLead.state || '-'}</td>
                           <td className="py-6 px-4 text-gray-300 text-xs capitalize">{preLead.source}</td>
                           <td className="py-6 px-4 text-gray-300 text-xs">
                             <div className="flex items-center gap-2">
                               <span className="max-w-xs truncate cursor-pointer" 
-                                    onClick={() => toggleExpandRow(preLead.id)}
-                                    title="Click to expand/collapse">
+                                onClick={() => toggleExpandRow(preLead.id)}
+                                title="Click to expand/collapse">
                                 {preLead.reason}
                               </span>
                               <button
@@ -293,7 +293,7 @@ export default function PreLeadsPage() {
                                 title={expandedRows.has(preLead.id) ? "Collapse" : "Expand"}
                               >
                                 <svg className={`w-4 h-4 transition-transform duration-200 ${expandedRows.has(preLead.id) ? 'rotate-180' : ''}`} 
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
                               </button>
@@ -304,12 +304,14 @@ export default function PreLeadsPage() {
                           </td>
                           <td className="py-6 px-4">
                             {preLead.converted_to_lead_id ? (
-                              <span className="text-green-400 text-xs font-medium px-2 py-1 bg-green-900/20 rounded-full">
-                                ✓ Converted
+                              <span className="text-green-400 text-base font-medium px-2 py-1 bg-green-900/20 rounded-full">
+                                {/* ✓ Converted */}
+                                Converted
                               </span>
                             ) : (
-                              <span className="text-blue-400 text-xs font-medium px-2 py-1 bg-blue-900/20 rounded-full">
-                                • Active
+                              <span className="text-blue-400 text-base font-medium px-2 py-1 bg-blue-900/20 rounded-full">
+                                {/* • Active */}
+                                Active
                               </span>
                             )}
                           </td>
@@ -324,7 +326,7 @@ export default function PreLeadsPage() {
                                   }));
                                   setShowConvertModal(true);
                                 }}
-                                className="btn-primary text-xs px-3 py-1"
+                                className="btn-primary text-base px-3 py-1"
                               >
                                 Convert to Lead
                               </button>
@@ -335,18 +337,18 @@ export default function PreLeadsPage() {
                           <tr className="border-b border-gray-800 bg-gray-800/20">
                             <td colSpan="8" className="py-4 px-4">
                               <div className="ml-4">
-                                <div className="text-xs text-gray-300 mb-2">
+                                <div className="text-lg text-gray-300 mb-2">
                                   <span className="font-medium text-gray-200">Full Reason:</span>
                                 </div>
-                                <div className="text-xs text-gray-400 bg-gray-900/30 p-3 rounded-lg">
+                                <div className="text-base text-gray-400 bg-gray-900/30 p-3 rounded-lg">
                                   {preLead.reason}
                                 </div>
                                 {preLead.notes && (
                                   <div className="mt-3">
-                                    <div className="text-xs text-gray-300 mb-1">
+                                    <div className="text-lg text-gray-300 mb-1">
                                       <span className="font-medium text-gray-200">Notes:</span>
                                     </div>
-                                    <div className="text-xs text-gray-400 bg-gray-900/30 p-3 rounded-lg">
+                                    <div className="text-base text-gray-400 bg-gray-900/30 p-3 rounded-lg">
                                       {preLead.notes}
                                     </div>
                                   </div>
@@ -366,7 +368,7 @@ export default function PreLeadsPage() {
 
         {/* Create Pre-Lead Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
             <div className="glass-card max-w-md w-full p-5">
               <h2 className="text-xl font-semibold text-white mb-6">Create Pre-Lead</h2>
               

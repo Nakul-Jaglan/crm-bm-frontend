@@ -59,14 +59,14 @@ const Navbar = () => {
   if (!user) return null;
 
   return (
-    <nav className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50 shadow-sm py-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+              {/* <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
                 <img src="/logo.png" alt="Bonhoeffer Machines" className="w-6 h-6 object-contain" />
-              </div>
+              </div> */}
               <span className="font-bold text-xl text-white">
                 Bonhoeffer Machines
               </span>
@@ -115,7 +115,7 @@ const Navbar = () => {
                   </div>
                 )}
                 <svg
-                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                  className={`w-10 h-10 text-gray-400 transition-transform duration-200 ${
                     isProfileDropdownOpen ? 'rotate-180' : ''
                   }`}
                   fill="none"

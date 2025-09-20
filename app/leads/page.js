@@ -336,7 +336,7 @@ export default function LeadsPage() {
 
         {/* Create Lead Modal */}
         {showCreateLeadModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
             <div className="glass-card p-5 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-semibold text-white mb-6">Create New Lead</h2>
               

@@ -236,7 +236,7 @@ export default function AdminUsersPage() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="btn-primary flex items-center"
+              className="btn-primary cursor-pointer flex items-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -379,14 +379,29 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {user.photo_url ? (
-                            <img src={user.photo_url} alt={user.full_name} className="w-10 h-10 rounded-full object-cover" />
-                          ) : (
-                            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                              <span className="text-white font-bold">
-                                {user.full_name.charAt(0).toUpperCase()}
-                              </span>
-                            </div>
-                          )}
+                            <img 
+                              src={user.photo_url.startsWith('http') ? user.photo_url : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${user.photo_url}`} 
+                              alt={user.full_name} 
+                              className="w-10 h-10 rounded-full object-cover border-2 border-gray-600" 
+                              onError={(e) => {
+                                console.log('Image failed to load:', e.target.src);
+                                // Hide the image and show fallback
+                                e.target.style.display = 'none';
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }}
+                              onLoad={(e) => {
+                                console.log('Image loaded successfully:', e.target.src);
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className="w-10 h-10 bg-primary rounded-full flex items-center justify-center" 
+                            style={{ display: user.photo_url ? 'none' : 'flex' }}
+                          >
+                            <span className="text-white font-bold">
+                              {user.full_name.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-white">
                               {user.full_name}
@@ -423,13 +438,13 @@ export default function AdminUsersPage() {
                           <div className="flex justify-end space-x-2">
                             <button
                               onClick={() => handleEditUser(user)}
-                              className="text-blue-400 hover:text-blue-300"
+                              className="text-blue-400 cursor-pointer hover:text-blue-300"
                             >
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeleteUser(user)}
-                              className="text-red-400 hover:text-red-300"
+                              className="text-red-400 cursor-pointer hover:text-red-300"
                             >
                               Delete
                             </button>
@@ -467,7 +482,7 @@ export default function AdminUsersPage() {
                   </h3>
                   <button
                     onClick={() => setShowCreateModal(false)}
-                    className="text-gray-400 hover:text-gray-200"
+                    className="text-gray-400 cursor-pointer hover:text-gray-200"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -566,7 +581,7 @@ export default function AdminUsersPage() {
                       <button
                         type="button"
                         onClick={generatePassword}
-                        className="btn-secondary px-4 whitespace-nowrap"
+                        className="btn-secondary cursor-pointer px-4 whitespace-nowrap"
                       >
                         Generate
                       </button>
@@ -578,14 +593,14 @@ export default function AdminUsersPage() {
                   <button
                     type="button"
                     onClick={() => setShowCreateModal(false)}
-                    className="btn-secondary"
+                    className="btn-secondary cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isCreating}
-                    className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    className="btn-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                   >
                     {isCreating ? (
                       <>
@@ -613,7 +628,7 @@ export default function AdminUsersPage() {
                   </h3>
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="text-gray-400 hover:text-gray-200"
+                    className="text-gray-400 cursor-pointer hover:text-gray-200"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -712,14 +727,14 @@ export default function AdminUsersPage() {
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="btn-secondary"
+                    className="btn-secondary cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUpdating}
-                    className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    className="btn-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                   >
                     {isUpdating ? (
                       <>
@@ -747,7 +762,7 @@ export default function AdminUsersPage() {
                   </h3>
                   <button
                     onClick={() => setShowDeleteModal(false)}
-                    className="text-gray-400 hover:text-gray-200"
+                    className="text-gray-400 cursor-pointer hover:text-gray-200"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -790,14 +805,14 @@ export default function AdminUsersPage() {
                   <button
                     type="button"
                     onClick={() => setShowDeleteModal(false)}
-                    className="btn-secondary"
+                    className="btn-secondary cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmDeleteUser}
                     disabled={deleteConfirmText !== 'CONFIRM'}
-                    className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    className="bg-red-600 cursor-pointer hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Delete User
                   </button>

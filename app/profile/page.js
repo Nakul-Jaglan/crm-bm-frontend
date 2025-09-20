@@ -237,7 +237,7 @@ function ProfileView() {
               {!isEditing ? (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                  className="flex cursor-pointer items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
                 >
                   <Edit3 className="w-4 h-4" />
                   <span>Edit Profile</span>
@@ -249,14 +249,14 @@ function ProfileView() {
                       setIsEditing(false);
                       fetchProfileData(); // Reset data
                     }}
-                    className="px-4 py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                    className="px-4 cursor-pointer py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors duration-200"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                    className="flex cursor-pointer items-center space-x-2 bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-200"
                   >
                     {saving ? (
                       <LoadingSpinner size="small" />
@@ -299,7 +299,7 @@ function ProfileView() {
               <button
                 onClick={triggerPhotoUpload}
                 disabled={uploadingPhoto}
-                className={`absolute inset-0 bg-black rounded-full flex flex-col items-center justify-center transition-opacity duration-200 disabled:opacity-50 ${
+                className={`absolute cursor-pointer inset-0 bg-black rounded-full flex flex-col items-center justify-center transition-opacity duration-200 disabled:opacity-50 ${
                   isDragOver 
                     ? 'opacity-100 bg-opacity-70' 
                     : 'bg-opacity-50 opacity-0 group-hover:opacity-100'
@@ -410,7 +410,7 @@ function ProfileView() {
             </div>
 
             {/* Address */}
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
                 Address
@@ -428,7 +428,7 @@ function ProfileView() {
                   {profileData.address || 'Not specified'}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Account Information */}
