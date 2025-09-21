@@ -163,7 +163,7 @@ const MapComponent = ({ salespeople, leads, selectedFilter }) => {
 
       const marker = L.marker([person.current_latitude, person.current_longitude], { icon })
         .bindPopup(`
-          <div class="glass-card map-popup">
+          <div class="glass-card-map map-popup">
             <h3 class="map-popup-title">${person.full_name}</h3>
             <div class="map-popup-field">
               <strong>Email:</strong> ${person.email}
@@ -237,10 +237,10 @@ const MapComponent = ({ salespeople, leads, selectedFilter }) => {
                 ${lead.status}
               </span>
               <span class="status-badge ${lead.assigned_to ? 'assignment-assigned' : 'assignment-unassigned'}">
-                ${lead.assigned_to ? '✅ Assigned' : '⚠️ Unassigned'}
+                ${lead.assigned_to ? 'Assigned' : 'Unassigned'}
               </span>
             </div>
-            ${lead.estimated_value ? `<div class="map-popup-value">💰 Value: ₹${lead.estimated_value.toLocaleString()}</div>` : ''}
+            ${lead.estimated_value ? `<div class="map-popup-value"> Value: ₹${lead.estimated_value.toLocaleString()}</div>` : ''}
           </div>
         `)
         .addTo(map);
@@ -443,7 +443,7 @@ function MapView() {
 
         {/* Map */}
         <div className="glass-card p-6 mb-8">
-          <div className="h-[600px] relative">
+          <div className="h-[700px] relative">
             <DynamicMapComponent 
               salespeople={salespeople}
               leads={leads}
@@ -454,37 +454,37 @@ function MapView() {
 
         {/* Legend */}
         <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">Map Legend</h3>
+          <h3 className="text-2xl font-semibold text-white mb-6">Map Legend</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
-              <h4 className="font-medium text-white mb-4">Salespeople Status</h4>
+              <h4 className="font-medium text-white mb-4 text-xl">Salespeople Status</h4>
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <div className="w-4 h-4 rounded-full bg-green-500 mr-3"></div>
-                  <span className="text-sm text-gray-400">🟢 Active (last 2 hours)</span>
+                  {/* <div className="w-4 h-4 rounded-full bg-green-500 mr-3"></div> */}
+                  <span className="text-lg text-gray-400">🟢 Active (last 2 hours)</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="w-4 h-4 rounded-full bg-yellow-500 mr-3"></div>
-                  <span className="text-sm text-gray-400">🟡 Moderate (2-8 hours)</span>
+                  {/* <div className="w-4 h-4 rounded-full bg-yellow-500 mr-3"></div> */}
+                  <span className="text-lg text-gray-400">🟡 Moderate (2-8 hours)</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="w-4 h-4 rounded-full bg-red-500 mr-3"></div>
-                  <span className="text-sm text-gray-400">🔴 Inactive (8+ hours)</span>
+                  {/* <div className="w-4 h-4 rounded-full bg-red-500 mr-3"></div> */}
+                  <span className="text-lg text-gray-400">🔴 Inactive (8+ hours)</span>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="font-medium text-white mb-4">Marker Types</h4>
+              <h4 className="font-medium text-white mb-4 text-xl">Marker Types</h4>
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full mr-3 transform rotate-45 relative">
+                  {/* <div className="w-6 h-6 bg-blue-500 rounded-full mr-3 transform rotate-45 relative">
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                  <span className="text-sm text-gray-400">📍 Salespeople (Pin Markers)</span>
+                  </div> */}
+                  <span className="text-lg text-gray-400">📍 Salespeople (Pin Markers)</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="w-4 h-4 rounded-full bg-red-600 mr-3"></div>
-                  <span className="text-sm text-gray-400">🎯 Leads (Circle Markers)</span>
+                  {/* <div className="w-4 h-4 rounded-full bg-red-600 mr-3"></div> */}
+                  <span className="text-lg text-gray-400">🎯 Leads (Circle Markers)</span>
                 </div>
               </div>
             </div>
