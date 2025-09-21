@@ -229,7 +229,7 @@ function ProfileView() {
               <h1 className="text-3xl font-bold text-white font-montserrat">
                 My Profile
               </h1>
-              <p className="text-gray-400 mt-2">
+              <p className="text-gray-400 mt-2 mr-2">
                 Manage your personal information and account settings
               </p>
             </div>
@@ -276,7 +276,7 @@ function ProfileView() {
           {/* Profile Header */}
           <div className="flex items-center space-x-6 mb-8 pb-6 border-b border-gray-700">
             <div 
-              className={`relative group transition-all duration-200 ${isDragOver ? 'scale-105 ring-4 ring-blue-500 ring-opacity-50' : ''}`}
+              className={`hidden [@media(min-width:500px)]:block relative group transition-all duration-200 ${isDragOver ? 'scale-105 ring-4 ring-blue-500 ring-opacity-50' : ''}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -330,7 +330,7 @@ function ProfileView() {
               <h2 className="text-2xl font-bold text-white">
                 {profileData.full_name}
               </h2>
-              <p className="text-gray-400 mb-2">{profileData.email}</p>
+              <p className="text-gray-400 mb-2">{profileData.email.replace('bonhoeffer', 'company')}</p>
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getRoleBadgeColor(profileData.role)}`}>
                 <Shield className="w-4 h-4 mr-1" />
                 {profileData.role.toUpperCase()}
@@ -372,7 +372,7 @@ function ProfileView() {
                 <span className="text-xs text-gray-500 ml-2">(Cannot be changed)</span>
               </label>
               <div className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-400 cursor-not-allowed">
-                {profileData.email}
+                {profileData.email.replace('bonhoeffer', 'company') || 'Not specified'}
               </div>
             </div>
 

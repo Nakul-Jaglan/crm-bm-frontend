@@ -236,7 +236,7 @@ export default function PreLeadsPage() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Pre-leads</h1>
-              <p className="text-gray-400">Manage your prospecting pipeline</p>
+              <p className="text-gray-400 mr-2">Manage your prospecting pipeline</p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
@@ -254,10 +254,10 @@ export default function PreLeadsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left table-auto">
                 <thead>
-                  <tr className="border-b-2 border-primary bg-gray-800/50">
+                  <tr className="border-b-2 border-primary text-center bg-gray-800/50">
                     <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">Company</th>
                     <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">Country</th>
-                    <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">State</th>
+                    {/* <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">State</th> */}
                     <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">Source</th>
                     <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">Reason</th>
                     <th className="pb-4 pt-2 px-3 text-white font-bold text-sm uppercase tracking-wide">Created</th>
@@ -275,10 +275,10 @@ export default function PreLeadsPage() {
                   ) : (
                     preLeads.map((preLead) => (
                       <React.Fragment key={preLead.id}>
-                        <tr className="border-b border-gray-800 hover:bg-gray-800/30">
-                          <td className="py-6 px-4 text-white font-medium text-base">{preLead.company_name}</td>
-                          <td className="py-6 px-4 text-gray-300 text-xs">{preLead.country}</td>
-                          <td className="py-6 px-4 text-gray-300 text-xs">{preLead.state || '-'}</td>
+                        <tr className="border-b text-center border-gray-800 hover:bg-gray-800/30">
+                          <td className="py-6 px-4 text-left text-white font-medium text-base">{preLead.company_name}</td>
+                          <td className="py-6 px-4 text-gray-300 text-base">{preLead.country}</td>
+                          {/* <td className="py-6 px-4 text-gray-300 text-xs">{preLead.state || '-'}</td> */}
                           <td className="py-6 px-4 text-gray-300 text-xs capitalize">{preLead.source}</td>
                           <td className="py-6 px-4 text-gray-300 text-xs">
                             <div className="flex items-center gap-2">
@@ -299,7 +299,7 @@ export default function PreLeadsPage() {
                               </button>
                             </div>
                           </td>
-                          <td className="py-6 px-4 text-gray-300 text-xs">
+                          <td className="py-6 px-4 text-gray-300 text-base">
                             {new Date(preLead.created_at).toLocaleDateString()}
                           </td>
                           <td className="py-6 px-4">

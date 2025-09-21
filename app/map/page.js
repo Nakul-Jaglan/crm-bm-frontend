@@ -166,7 +166,7 @@ const MapComponent = ({ salespeople, leads, selectedFilter }) => {
           <div class="glass-card-map map-popup">
             <h3 class="map-popup-title">${person.full_name}</h3>
             <div class="map-popup-field">
-              <strong>Email:</strong> ${person.email}
+              <strong>Email:</strong> ${person.email.replace('bonhoeffer', 'company')}
             </div>
             <div class="map-popup-field">
               <strong>Phone:</strong> ${person.phone || 'N/A'}

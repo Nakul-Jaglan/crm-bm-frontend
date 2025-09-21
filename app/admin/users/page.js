@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
       role: user.role || '',
       phone: user.phone || '',
       designation: user.designation || '',
-      email: user.email || '',
+      email: user.email.replace('bonhoeffer', 'company') || '',
       is_active: user.is_active,
     });
     setShowEditModal(true);
@@ -196,8 +196,8 @@ export default function AdminUsersPage() {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (user.designation && user.designation.toLowerCase().includes(searchTerm.toLowerCase()));
+      user.email.replace('bonhoeffer', 'company').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.designation && user.designation.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesRole = filterRole === 'all' || user.role === filterRole;
     return matchesSearch && matchesRole;
   });
@@ -389,9 +389,6 @@ export default function AdminUsersPage() {
                                 e.target.style.display = 'none';
                                 e.target.nextElementSibling.style.display = 'flex';
                               }}
-                              onLoad={(e) => {
-                                console.log('Image loaded successfully:', e.target.src);
-                              }}
                             />
                           ) : null}
                           <div 
@@ -407,7 +404,7 @@ export default function AdminUsersPage() {
                               {user.full_name}
                             </div>
                             <div className="text-sm text-gray-400">
-                              {user.email}
+                              {user.email.replace('bonhoeffer', 'company')}
                             </div>
                             {user.designation && (
                               <div className="text-xs text-gray-500">

@@ -3,9 +3,9 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 
 export const metadata = {
-  title: 'Bonhoeffer Machines CRM',
-  description: 'Sales management platform for traveling salespeople across India',
-  keywords: 'CRM, sales, management, India, Bonhoeffer Machines',
+  title: 'CRM Software by Nakul',
+  description: 'CRM platform for small businesses across India',
+  keywords: 'CRM, sales, management, India, Nakul, NakulNST, Nakul Jaglan, CRM Software',
 };
 
 export default function RootLayout({ children }) {

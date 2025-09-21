@@ -182,7 +182,7 @@ export default function SalespersonPage() {
                     Lat: {currentLocation.lat.toFixed(6)}, Lng: {currentLocation.lng.toFixed(6)}
                   </div>
                 )}
-                
+
                 <button
                   onClick={handleUpdateLocation}
                   disabled={isUpdatingLocation}

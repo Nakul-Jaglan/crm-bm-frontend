@@ -6,6 +6,7 @@ import ProtectedRoute from '../../components/ProtectedRoute';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Toast from '../../components/Toast';
 import { userAPI } from '../../lib/api';
+import Link from 'next/link';
 
 export default function SalespersonsPage() {
   const [salespersons, setSalespersons] = useState([]);
@@ -38,8 +39,8 @@ export default function SalespersonsPage() {
   const filterAndSortSalespersons = () => {
     let filtered = salespersons.filter(person => {
       const matchesSearch = person.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           (person.designation && person.designation.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                           (person.email && person.email.toLowerCase().includes(searchTerm.toLowerCase()));
+        (person.designation && person.designation.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (person.email && person.email.replace('bonhoeffer', 'company').toLowerCase().includes(searchTerm.toLowerCase()))
       
       const matchesStatus = filterStatus === 'all' || person.status === filterStatus;
       
@@ -292,9 +293,12 @@ export default function SalespersonsPage() {
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                     </svg>
-                    <a href={`mailto:${person.email}`} className="hover:text-primary transition-colors">
-                      {person.email}
-                    </a>
+                    <Link
+                      href={`mailto:${person.email.replace('bonhoeffer', 'company')}`}
+                      className="hover:text-primary transition-colors"
+                    >
+                      {person.email.replace('bonhoeffer', 'company')}
+                    </Link>
                   </div>
                   
                   {person.phone && (
@@ -348,7 +352,7 @@ export default function SalespersonsPage() {
                     </a>
                   )}
                   <a
-                    href={`mailto:${person.email}`}
+                    href={`mailto:${person.email.replace('bonhoeffer', 'company')}`}
                     className="btn-secondary text-sm flex-1 text-center"
                   >
                     Email
@@ -361,7 +365,7 @@ export default function SalespersonsPage() {
                       className="btn-secondary text-sm px-3"
                       title="View location on map"
                     >
-                      📍
+                      Location
                     </a>
                   )}
                 </div>

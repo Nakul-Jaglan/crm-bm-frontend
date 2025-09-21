@@ -480,10 +480,7 @@ const HowItWorksPage = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className=" rounded-lg flex items-center justify-center">
-                  <img src='/logo.png' className="w-15 text-white" />
-                </div>
-                <span className="text-xl font-bold text-white">Bonhoeffer Machines CRM</span>
+                <span className="text-xl font-bold text-white">CRM Software</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -500,7 +497,7 @@ const HowItWorksPage = () => {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 py-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -527,10 +524,10 @@ const HowItWorksPage = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700"
+                  className="bg-gray-700 backdrop-blur-sm rounded-xl p-4 border border-gray-700 flex flex-row items-center gap-4"
                 >
-                  <div className="text-blue-400 mb-2">{feature.icon}</div>
-                  <p className="text-gray-300 text-sm font-medium">{feature.text}</p>
+                  <div className="text-blue-400 ">{feature.icon}</div>
+                  <p className="text-gray-300 text-lg font-medium">{feature.text}</p>
                 </motion.div>
               ))}
             </div>
@@ -539,7 +536,7 @@ const HowItWorksPage = () => {
       </div>
 
       {/* Role Selection */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -691,7 +688,7 @@ const HowItWorksPage = () => {
       </div>
 
       {/* Interactive Workflow Diagram */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -715,11 +712,9 @@ const HowItWorksPage = () => {
           />
         </div>
 
-        {/* Real-time Demo Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <RealTimeDemo selectedRole={selectedRole} />
           
-          {/* System Stats */}
           <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-700">
             <h3 className="text-xl font-semibold text-white mb-6">System Performance</h3>
             <div className="grid grid-cols-2 gap-4">
@@ -745,7 +740,6 @@ const HowItWorksPage = () => {
               ))}
             </div>
             
-            {/* Live Activity Feed */}
             <div className="mt-6">
               <h4 className="text-lg font-medium text-white mb-4">Live Activity</h4>
               <div className="space-y-2 max-h-32 overflow-hidden">
@@ -772,7 +766,7 @@ const HowItWorksPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Demo Accounts Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -787,27 +781,27 @@ const HowItWorksPage = () => {
             Experience the CRM system with our demo accounts. Each role has pre-configured data to showcase the functionality.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="flex gap-6 mb-8">
             {[
-              { role: 'Admin', email: 'admin@bonhoeffer.com', password: 'admin123', description: 'Full system access' },
-              { role: 'Executive', email: 'executive@bonhoeffer.com', password: 'exec123', description: 'Strategic oversight' },
-              { role: 'CRM Manager', email: 'crm@bonhoeffer.com', password: 'crm123', description: 'Lead management' },
-              { role: 'HR Manager', email: 'hr@bonhoeffer.com', password: 'hr123', description: 'Employee onboarding' },
-              { role: 'Salesperson', email: 'salesperson@bonhoeffer.com', password: 'sales123', description: 'Field operations' }
+              { role: 'Admin', email: 'admin@company.com', password: 'admin123', description: 'Full system access' },
+              { role: 'Executive', email: 'executive@company.com', password: 'exec123', description: 'Strategic oversight' },
+              { role: 'CRM Manager', email: 'crm@company.com', password: 'crm123', description: 'Lead management' },
+              { role: 'HR Manager', email: 'hr@company.com', password: 'hr123', description: 'Employee onboarding' },
+              { role: 'Salesperson', email: 'salesperson@company.com', password: 'sales123', description: 'Field operations' }
             ].slice(0, 5).map((demo, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-gray-500 transition-colors"
+                className="bg-gray-700 backdrop-blur-sm rounded-xl mx-auto p-5 border border-gray-700 hover:border-gray-500 transition-colors"
               >
                 <div className="text-lg font-semibold text-white mb-2">{demo.role}</div>
                 <div className="text-sm text-gray-400 mb-4">{demo.description}</div>
-                <div className="text-xs text-gray-500 space-y-1">
+                {/* <div className="text-xs text-gray-500 space-y-1">
                   <div><span className="font-medium">Email:</span> {demo.email}</div>
                   <div><span className="font-medium">Password:</span> {demo.password}</div>
-                </div>
+                </div> */}
               </motion.div>
             ))}
           </div>
@@ -888,17 +882,17 @@ const HowItWorksPage = () => {
 
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 py-4 text-center">
+          {/* <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <Globe className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">Bonhoeffer Machines CRM</span>
+              <span className="text-xl font-bold text-white">CRM Software</span>
             </div>
-            <div className="text-gray-400 text-sm">
-              © 2024 Bonhoeffer Machines. Streamlining sales across India.
-            </div>
+          </div> */}
+          <div className="text-gray-400 text-base">
+            <p>&copy; 2025 <strong className='text-[#999B30]'><Link href="https://github.com/Nakul-Jaglan">Nakul</Link></strong>. All rights reserved.</p>
           </div>
         </div>
       </footer>

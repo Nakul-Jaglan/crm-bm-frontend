@@ -1,6 +1,6 @@
-# Bonhoeffer Machines CRM Frontend
+# CRM Software Frontend
 
-A modern, responsive web application built with Next.js and React for the Bonhoeffer Machines CRM system. Features a **dark theme-only interface** designed for optimal user experience and reduced eye strain.
+A modern, responsive web application built with Next.js and React for the CRM system. Features a **dark theme-only interface** designed for optimal user experience and reduced eye strain.
 
 ## 🚀 Quick Start
 

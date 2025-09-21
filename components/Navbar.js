@@ -63,23 +63,20 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              {/* <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                <img src="/logo.png" alt="Bonhoeffer Machines" className="w-6 h-6 object-contain" />
-              </div> */}
-              <span className="font-bold text-xl text-white">
-                Bonhoeffer Machines
-              </span>
+            <Link href="/dashboard" className="">
+              <h1 className="font-bold text-2xl text-white">
+                Company
+              </h1>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-2">
             {userNavigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-primary transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-gray-800 text-center"
+                className="text-gray-300 hover:text-primary transition-colors duration-200 font-medium px-2 py-2 rounded-lg hover:bg-gray-700 text-center"
               >
                 {item.name}
               </Link>
@@ -147,7 +144,7 @@ const Navbar = () => {
                       <div>
                         <p className="text-white font-medium">{user.full_name}</p>
                         <p className="text-gray-400 text-sm capitalize">{user.role}</p>
-                        <p className="text-gray-500 text-xs">{user.email}</p>
+                        <p className="text-gray-500 text-xs">{user.email.replace('bonhoeffer', 'company')}</p>
                       </div>
                     </div>
                   </div>
